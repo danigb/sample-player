@@ -153,7 +153,7 @@ function Player (ac, options) {
   this.options = options || {}
   this.nextId = 1
   this._playing = {}
-  this.onevent = function () {}
+  this.onEvent = function () {}
 
   // if its a destination, connect
   if (ac.context) {
@@ -185,13 +185,12 @@ function Player (ac, options) {
  */
 Player.prototype.start = function (buffer, when, duration, options, destination) {
   var ac = this.ac
-  var event = this.onevent
   var tracked = this._playing
   when = when || ac.currentTime
 
   var opts = from(options || {}, this.options, DEFAULTS)
 
-  var s = new Sample(buffer, destination || this.output, opts, event)
+  var s = new Sample(buffer, destination || this.output, opts, this.onEvent)
   s.id = this.nextId++
   tracked[s.id] = s
   s.onended = function () { delete tracked[s.id] }

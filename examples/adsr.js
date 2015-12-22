@@ -8,7 +8,7 @@ console.log('loading sample...')
 load('examples/audio/dropsine.wav').then(function (buffer) {
   console.log('loaded', buffer, now)
   var player = Player(ac.destination, { loop: true, adsr: [0.02, 0.02, 0.6, 0.5] })
-  player.onevent = function (event, note) {
+  player.onEvent = function (event, note) {
     console.log(event, note)
   }
   var now = ac.currentTime

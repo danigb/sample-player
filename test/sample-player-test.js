@@ -27,7 +27,7 @@ describe('sample-player', () => {
   describe('events', function () {
     it('fires start event', function () {
       var player = Player(ac.destination)
-      var events = player.onevent = sinon.spy()
+      var events = player.onEvent = sinon.spy()
       player.start(audio())
       assert.equal(events.callCount, 1)
       assert.equal(events.getCall(0).args[0], 'start')
