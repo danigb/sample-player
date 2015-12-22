@@ -32,7 +32,9 @@ var DEFAULTS = {
  * @param {AudioDestinationNode|AudioContext} destination - the destination
  * or the audio context. In the first case, the player will connect to that
  * destination. In the second, you will have to call `connect` explicitly
- * @param {Hash} options - play options:
+ * @param {Hash} options - the sample play configuration
+ *
+ * Valid options:
  *
  * - gain: the audio gain (default: 1)
  * - loop: loop or not the audio (default: false)
@@ -61,9 +63,10 @@ function Player (ac, options) {
 }
 var player = Player.prototype
 
-/*
+/**
  * Start a buffer
  *
+ * @name player.start
  * @param {AudioBuffer} buffer - the audio buffer to play
  * @param {Float} when - the start time
  * @param {Float} duration - (Optional) the duration in seconds. If it's
@@ -82,9 +85,10 @@ var player = Player.prototype
 player.start = function (buffer, when, duration, options, destination) {
   var ac = this.ac
   var event = this.onevent
+  var tracked = this._playing
   when = when || ac.currentTime
 
-  var p = { id: this._id++ }
+  var p = { id: ++this._id }
   var opts = from(options || {}, this.options, DEFAULTS)
 
   p.amp = ac.createGain()
@@ -113,15 +117,18 @@ player.start = function (buffer, when, duration, options, destination) {
     p.source.stop(stopAt)
   }
 
-  this._playing[p.id] = p
-  p.onended = function () {
+  tracked[p.id] = p
+  p.source.onended = function () {
     event('ended', p)
     p.source.stop()
     p.source.disconnect()
-    delete this._playing[p.id]
+    p.filter.disconnect()
+    p.amp.disconnect()
+    p.env.disconnect()
+    delete tracked[p.id]
   }
-  event('start', p, when)
 
+  event('start', p, when)
   p.env.start(when)
   p.source.start(when)
   if (duration > 0) p.stop(when + duration)
@@ -129,7 +136,7 @@ player.start = function (buffer, when, duration, options, destination) {
   return p
 }
 
-player.stop = function () {
+player.stop = function (when, id) {
 
 }
 

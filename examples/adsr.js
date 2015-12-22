@@ -15,4 +15,5 @@ load('examples/audio/dropsine.wav').then(function (buffer) {
   player.start(buffer, now, 0.5, { gain: 0.4, freq: 2000 })
   player.start(buffer, now + 0.5, 0.5, { gain: 0.4, freq: 1000 })
   player.start(buffer, now + 1, 0.5, { gain: 0.4, pitch: -12 })
+  player.start(buffer, now + 1, null, { loop: false, gain: 0.4, pitch: -48 })
 })

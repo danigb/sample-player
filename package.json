@@ -4,7 +4,8 @@
   "description": "A web audio sample player",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "docs": "documentation -f md > API.md"
   },
   "repository": "https://github.com/danigb/smplr/tree/master/packages/sample-player",
   "keywords": [
