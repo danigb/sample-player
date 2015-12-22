@@ -4,8 +4,13 @@
   "description": "A web audio sample player",
   "main": "index.js",
   "scripts": {
+    "build": "npm run coverage && npm run docs && npm run disc && npm run dist",
     "test": "mocha",
-    "docs": "documentation -f md > API.md"
+    "docs": "documentation -f md > API.md",
+    "dist": "mkdir -p tmp && browserify index.js | uglifyjs > tmp/sample-player.min.js&& ls -hall tmp/",
+    "disc": "mkdir -p tmp && browserify --full-paths index.js | uglifyjs | discify > tmp/disc.html",
+    "coverage": "istanbul cover _mocha",
+    "cover": "npm run coverage && open coverage/lcov-report/index.html"
   },
   "repository": "https://github.com/danigb/smplr/tree/master/packages/sample-player",
   "keywords": [
