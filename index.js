@@ -136,12 +136,40 @@ player.start = function (buffer, when, duration, options, destination) {
   return p
 }
 
-player.stop = function (when, id) {
+/**
+ * Stop some or all of the playing samples
+ *
+ * @name player.stop
+ * @function
+ * @param {Float} when - the time to schedule the stop
+ * @param {Integer|Array<Integer>} ids - (Optional) the ids of the samples to stop
+ */
+player.stop = function (when, ids) {
+  when = when || 0
+  var tracked = this._playing
 
+  function stopById (id) {
+    var p = tracked[id]
+    if (!p) return null
+    p.stop()
+    delete tracked[id]
+    return id
+  }
+
+  if (!ids) return Object.keys(tracked).map(stopById)
+  else if (Array.isArray(ids)) return ids.map(stopById)
+  else return stopById(ids)
 }
 
+/**
+ * Set player destination
+ *
+ * @param {AudioNode} destination - the sample destination
+ * @return {Player} the player (chainable function)
+ */
 player.connect = function (destination) {
   this.output.connect(destination)
+  return this
 }
 
 function from (a, b, c) {
