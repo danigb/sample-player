@@ -64,7 +64,8 @@ longSound.play()
 #### Schedule events
 
 ```js
-var marimba = player(ac, { 'C2': ... , 'Db2': .... })
+var buffers = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer> }
+var marimba = player(ac, buffers, { map: 'midi' })
 marimba.schedule([
   { note: 'c2', time: 0, gain: 0.9 },
   { note: 'e2', time: 0.25, gain: 0.7 },
@@ -75,19 +76,13 @@ marimba.schedule([
 
 ## Install
 
-Via npm: `npm i --save sample-player` or grab the [browser ready file](https://raw.githubusercontent.com/danigb/sample-player/master/dist/sample-player.min.js) (4kb) which exports `loadAudio` as window global.
+Via npm: `npm i --save sample-player` or grab the [browser ready file](https://raw.githubusercontent.com/danigb/sample-player/master/dist/sample-player.min.js) which exports `SamplePlayer` as window global.
 
 ## API
 
 <a name="player"></a>
 
 #### `player(ac, source, options)`
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ac | <code>AudioContext</code> | the audio context |
-| source | <code>Object</code> | the object to be loaded |
-| options | <code>Object</code> | (Optional) the load options for that object |
 
 
 ## Run tests and examples

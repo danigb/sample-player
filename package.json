@@ -7,9 +7,10 @@
     "build": "npm run coverage && npm run docs && npm run disc && npm run dist",
     "test": "mocha",
     "docs": "documentation -f md > API.md",
-    "dist": "mkdir -p tmp && browserify lib/index.js | uglifyjs > dist/sample-player.min.js&& ls -hall tmp/",
+    "dist": "mkdir -p dist && browserify lib/index.js | uglifyjs > dist/sample-player.min.js && ls -hall dist/",
     "coverage": "istanbul cover _mocha",
-    "cover": "npm run coverage && open coverage/lcov-report/index.html"
+    "cover": "npm run coverage && open coverage/lcov-report/index.html",
+    "prepublish": "npm test && npm run dist"
   },
   "repository": "https://github.com/danigb/smplr/tree/master/packages/sample-player",
   "keywords": [
