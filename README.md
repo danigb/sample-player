@@ -80,10 +80,127 @@ Via npm: `npm i --save sample-player` or grab the [browser ready file](https://r
 
 ## API
 
-<a name="player"></a>
+<a name="SamplePlayer"></a>
 
-#### `player(ac, source, options)`
+## SamplePlayer(ac, source, options) ⇒ <code>player</code>
+Create a sample player.
 
+**Returns**: <code>player</code> - the player  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ac | <code>AudioContext</code> | the audio context |
+| source | <code>ArrayBuffer</code> &#124; <code>Object.&lt;String, ArrayBuffer&gt;</code> |  |
+| options | <code>Onject</code> | (Optional) an options object |
+
+**Example**  
+```js
+var SamplePlayer = require('sample-player')
+var ac = new AudioContext()
+var snare = SamplePlayer(ac, <AudioBuffer>)
+snare.play()
+```
+
+* [SamplePlayer(ac, source, options)](#SamplePlayer) ⇒ <code>player</code>
+  * [.play](#SamplePlayer..player.play)
+  * [.start(name, when, options)](#SamplePlayer..player.start) ⇒ <code>AudioNode</code>
+  * [.stop(when, nodes)](#SamplePlayer..player.stop) ⇒ <code>Array</code>
+  * [.connect(destination)](#SamplePlayer..player.connect) ⇒ <code>AudioPlayer</code>
+  * [.schedule(source, map, when)](#SamplePlayer..player.schedule) ⇒ <code>Array</code>
+
+<a name="SamplePlayer..player.play"></a>
+
+#### player.play
+An alias for `player.start`
+
+**See**: player.start  
+**Since**: 0.3.0  
+<a name="SamplePlayer..player.start"></a>
+
+#### player.start(name, when, options) ⇒ <code>AudioNode</code>
+Start a sample buffer.
+
+The returned object has a function `stop(when)` to stop the sound.
+
+**Returns**: <code>AudioNode</code> - an audio node with a `stop` function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>String</code> | the name of the buffer. If the source of the SamplePlayer is one sample buffer, this parameter is not required |
+| when | <code>Float</code> | (Optional) when to start (current time if by default) |
+| options | <code>Object</code> | additional sample playing options |
+
+**Example**  
+```js
+var sample = player(ac, <AudioBuffer>).connect(ac.destination)
+sample.start()
+sample.start(5, { gain: 0.7 }) // name not required since is only one AudioBuffer
+```
+**Example**  
+```js
+var drums = player(ac, { snare: <AudioBuffer>, kick: <AudioBuffer>, ... }).connect(ac.destination)
+drums.start('snare')
+drums.start('snare', 0, { gain: 0.3 })
+```
+<a name="SamplePlayer..player.stop"></a>
+
+#### player.stop(when, nodes) ⇒ <code>Array</code>
+Stop some or all samples
+
+**Returns**: <code>Array</code> - an array of ids of the stoped samples  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| when | <code>Float</code> | (Optional) an absolute time in seconds (or currentTime if not specified) |
+| nodes | <code>Array</code> | (Optional) an array of nodes or nodes ids to stop |
+
+**Example**  
+```js
+var longSound = player(ac, <AudioBuffer>).connect(ac.destination)
+longSound.start(ac.currentTime)
+longSound.start(ac.currentTime + 1)
+longSound.start(ac.currentTime + 2)
+longSound.stop(ac.currentTime + 3) // stop the three sounds
+```
+<a name="SamplePlayer..player.connect"></a>
+
+#### player.connect(destination) ⇒ <code>AudioPlayer</code>
+Connect the player to a destination node
+
+**Chainable**  
+**Returns**: <code>AudioPlayer</code> - the player  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| destination | <code>AudioNode</code> | the destination node |
+
+**Example**  
+```js
+var sample = player(ac, <AudioBuffer>).connect(ac.destination)
+```
+<a name="SamplePlayer..player.schedule"></a>
+
+#### player.schedule(source, map, when) ⇒ <code>Array</code>
+Schedule events to be played
+
+**Returns**: <code>Array</code> - an array of ids  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| source | <code>Object</code> | the events source |
+| map | <code>function</code> | (Optional) a function to map the events source into events object. |
+| when | <code>Float</code> | (Optional) an absolute time to start (or currentTime if not present) |
+
+**Example**  
+```js
+var drums = player(ac, ...).connect(ac.destination)
+drums.schedule([
+  { name: 'kick', time: 0 },
+  { name: 'snare', time: 0.5 },
+  { name: 'kick', time: 1 },
+  { name: 'snare', time: 1.5 }
+])
+```
 
 ## Run tests and examples
 
