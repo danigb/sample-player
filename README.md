@@ -5,11 +5,9 @@
 A web audio sample player:
 
 ```js
-var Player = require('sample-player')
-var ac = new AudioContext()
-var player = new Player(ac.destination)
-// given an AudioBuffer...
-player.start(audioBuffer)
+var play = require('sample-player')
+var ac = new AudioBuffer()
+play(ac, <AudioBuffer>)
 ```
 
 ## Features
@@ -18,7 +16,6 @@ player.start(audioBuffer)
 - Amplitude envelope
 - Pitch and detune
 - Set sample properties per player or per buffer basis
-- Stop all scheduled plays
 
 ## Install
 
