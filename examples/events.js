@@ -9,7 +9,7 @@ console.log('Loading sample...')
 load(ac, 'examples/audio/piano.js').then(function (buffers) {
   console.log('loaded')
   var piano = player(ac, buffers, { map: 'midi' }).connect(ac.destination)
-  // piano.onevent = function (a, b, c) { console.log(a, b, c) }
+  piano.onstart = function (a, b, c) { console.log(a, b, c) }
   var notes = NOTES.concat(NOTES.slice(0, -1).reverse())
   console.log('schedule', notes)
   piano.schedule(notes, function (note, i) {
