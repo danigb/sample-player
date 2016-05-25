@@ -1,5 +1,7 @@
 CHANGELOG
 
+[0.3.3] Add ext/midi
+[0.3.2] Fix a typo in schedule event
 [0.3.0] Rewrite
 [0.1.0] First working version
 [0.0.3] Extract tracker
