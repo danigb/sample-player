@@ -2,44 +2,41 @@ var midimessage = require('midimessage')
 
 /**
  * Connect a player to a midi input
+ *
+ * The options accepts:
+ *
+ * - channel: the channel to listen to. Listen to all channels by default.
+ *
  * @param {MIDIInput} input
  * @param {SamplePlayer} player
+ * @param {Object} options - (Optional)
+ * @return {SamplePlayer} the player
  */
-function connect (input, player) {
+function connect (input, player, options) {
   var midiStartedNotes = {}
+  var opts = options || {}
+  var gain = opts.gain || function (vel) { return vel / 127 }
 
-  /*
-  * Process raw Web MIDI messages or already-parsed [midimessages](https://www.npmjs.com/package/midimessage) to start or stop sounds
-  *
-  * @param {MIDIMessageEvent | M} message - a raw [MIDI event](https://www.w3.org/TR/webmidi/#midimessageevent-interface) from the Web MIDI API or parsed as a MidiMessage from the midimessage module
-  * @return {Object} all the midi notes as handled by the player
-  * @example
-  * window.navigator.requestMIDIAccess().then(function onMIDISuccess (midi) {
-  * midi.inputs.forEach(function (input, channelKey) {
-  *   input.onmidimessage = player[channelKey].processMidiMessage
-  * }), function manageFailure () {...})
-  */
-  input.onmidimessage = function (message) {
-    if (message.messageType == null) {
-      message = midimessage(message)
+  input.onmidimessage = function (msg) {
+    var mm = msg.messageType ? msg : midimessage(msg)
+    if (mm.messageType === 'noteon' && mm.velocity === 0) {
+      mm.messageType = 'noteoff'
     }
+    if (opts.channel && mm.channel !== opts.channel) return
 
-    if (message.messageType === 'noteon' && message.velocity === 0) {
-      message.messageType = 'noteoff'
-    }
-
-    switch (message.messageType) {
+    switch (mm.messageType) {
       case 'noteon':
-        midiStartedNotes[message.key] = player.play(message.key, 0)
+        midiStartedNotes[mm.key] = player.play(mm.key, 0, { gain: gain(mm.velocity) })
         break
       case 'noteoff':
-        if (midiStartedNotes[message.key]) {
-          midiStartedNotes[message.key].stop()
+        if (midiStartedNotes[mm.key]) {
+          midiStartedNotes[mm.key].stop()
+          delete midiStartedNotes[mm.key]
         }
         break
     }
-    return player.midiStartedNotes
   }
+  return player
 }
 
 module.exports = { connect: connect }
