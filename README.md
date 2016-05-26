@@ -113,23 +113,24 @@ snare.play()
 ```
 
 * [SamplePlayer(ac, source, options)](#SamplePlayer) ⇒ <code>player</code>
-  * [.play](#SamplePlayer..player.play)
-  * [.start(name, when, options)](#SamplePlayer..player.start) ⇒ <code>AudioNode</code>
-  * [.stop(when, nodes)](#SamplePlayer..player.stop) ⇒ <code>Array</code>
-  * [.on(event, callback)](#SamplePlayer..player.on) ⇒ <code>AudioPlayer</code>
-  * [.connect(destination)](#SamplePlayer..player.connect) ⇒ <code>AudioPlayer</code>
-  * [.schedule(source, map, when)](#SamplePlayer..player.schedule) ⇒ <code>Array</code>
+  * [.play](#player.play)
+  * [.start(name, when, options)](#player.start) ⇒ <code>AudioNode</code>
+  * [.stop(when, nodes)](#player.stop) ⇒ <code>Array</code>
+  * [.on(event, callback)](#player.on) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
+  * [.connect(destination)](#player.connect) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
+  * [.schedule(source, map, when)](#player.schedule) ⇒ <code>Array</code>
+  * [.listenToMidi(input, options)](#player.listenToMidi) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
 
 <a name="SamplePlayer..player.play"></a>
 
-#### player.play
+### player.play
 An alias for `player.start`
 
 **See**: player.start  
 **Since**: 0.3.0  
 <a name="SamplePlayer..player.start"></a>
 
-#### player.start(name, when, options) ⇒ <code>AudioNode</code>
+### player.start(name, when, options) ⇒ <code>AudioNode</code>
 Start a sample buffer.
 
 The returned object has a function `stop(when)` to stop the sound.
@@ -156,7 +157,7 @@ drums.start('snare', 0, { gain: 0.3 })
 ```
 <a name="SamplePlayer..player.stop"></a>
 
-#### player.stop(when, nodes) ⇒ <code>Array</code>
+### player.stop(when, nodes) ⇒ <code>Array</code>
 Stop some or all samples
 
 **Returns**: <code>Array</code> - an array of ids of the stoped samples  
@@ -176,7 +177,7 @@ longSound.stop(ac.currentTime + 3) // stop the three sounds
 ```
 <a name="SamplePlayer..player.connect"></a>
 
-#### player.connect(destination) ⇒ <code>AudioPlayer</code>
+### player.connect(destination) ⇒ <code>AudioPlayer</code>
 Connect the player to a destination node
 
 **Chainable**  
@@ -190,9 +191,28 @@ Connect the player to a destination node
 ```js
 var sample = player(ac, <AudioBuffer>).connect(ac.destination)
 ```
-<a name="SamplePlayer..player.schedule"></a>
 
-#### player.schedule(source, map, when) ⇒ <code>Array</code>
+<a name="player.on"></a>
+### player.on(event, callback) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
+Adds a listener of an event
+
+**Chainable**  
+**Returns**: <code>[SamplePlayer](#SamplePlayer)</code> - the player  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| event | <code>String</code> | the event name |
+| callback | <code>function</code> | the event handler |
+
+**Example**  
+```js
+player.on('start', function(time, note) {
+  console.log(time, note)
+})
+```
+
+<a name="player.schedule"></a>
+### player.schedule(source, map, when) ⇒ <code>Array</code>
 Schedule events to be played
 
 **Returns**: <code>Array</code> - an array of ids  
@@ -212,6 +232,31 @@ drums.schedule([
   { name: 'kick', time: 1 },
   { name: 'snare', time: 1.5 }
 ])
+```
+
+<a name="player.listenToMidi"></a>
+### player.listenToMidi(input, options) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
+Connect a player to a midi input
+
+The options accepts:
+
+- channel: the channel to listen to. Listen to all channels by default.
+
+**Returns**: <code>[SamplePlayer](#SamplePlayer)</code> - the player  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>MIDIInput</code> |  |
+| options | <code>Object</code> | (Optional) |
+
+**Example**  
+```js
+var piano = player(...)
+window.navigator.requestMIDIAccess().then(function (midiAccess) {
+  midiAccess.inputs.forEach(function (midiInput) {
+    piano.listenToMidi(midiInput)
+  })
+})
 ```
 
 ## Run tests and examples
