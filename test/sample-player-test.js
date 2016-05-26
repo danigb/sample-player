@@ -3,14 +3,7 @@ var assert = require('assert')
 var Player = require('..')
 var Audio = require('./support/audio')
 
-describe('sample-player', function () {
-  describe('SamplePlayer', function () {
-    it('creates player a player', () => {
-      var audio = new Audio('snare')
-      var player = Player(audio.ac, audio.buffers)
-      assert(player)
-    })
-  })
+describe('player', function () {
   describe('connect', function () {
     it('returns the player instance', function () {
       var audio = new Audio('snare')

@@ -2,16 +2,14 @@
 require('web-audio-test-api')
 
 module.exports = function Audio (keys) {
-  var json = null
   var ac = new AudioContext()
-  var names = keys.split ? keys.split(' ') : keys
+  var names = !keys ? [] : keys.split ? keys.split(' ') : keys || []
   var buffers = {}
   names.forEach(function (key, i) {
     buffers[key] = ac.createBuffer(2, i, 44100)
   })
   function output () {
-    json = json || ac.toJSON()
-    return json.inputs[0]
+    return ac.toJSON().inputs[0]
   }
   function played (i) {
     if (arguments.length > 0) return played()[i]

@@ -30,25 +30,25 @@ drums.play('kick')
 drums.play('snare', { gain: 0.5 })
 ```
 
-#### Map name notes to midi (and oposite)
+#### Map note names to midi (and oposite)
 
 ```js
 var samples = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
-var piano = player(ac, samples, { map: 'midi' })
+var piano = player(ac, samples)
 piano.play(69) // => Plays 'A4'
 piano.play('C#2') // => Plays 'Db2'
 ```
 
-#### Events listeners
+#### Events
 
 ```js
 var drums = player(ac, { kick: ..., snare: ..., hihat ... })
-drums.onstart = function (when, name) {
+drums.on('start', function (when, name) {
   console.log('start', name)
-}
-drums.onended = function (when, name) {
+})
+drums.on('ended', function (when, name) {
   console.log('ended', name)
-}
+})
 drums.start('kick')
 // console logs 'start kick'
 // console.logs 'ended kick' when sound ends
@@ -61,11 +61,22 @@ var longSound = player(ac, <AudioBuffer>, { adsr: [1.2, 0.5, 0.8, 1.3] })
 longSound.play()
 ```
 
-#### Schedule events
+#### Listen to midi inputs
 
 ```js
-var buffers = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer> }
-var marimba = player(ac, buffers, { map: 'midi' })
+var piano = player(...)
+window.navigator.requestMIDIAccess().then(function (midiAccess) {
+  midiAccess.inputs.forEach(function (midiInput) {
+    piano.listenToMidi(midiInput)
+  })
+})
+```
+
+#### Play events
+
+```js
+var buffers = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
+var marimba = player(ac, buffers)
 marimba.schedule([
   { note: 'c2', time: 0, gain: 0.9 },
   { note: 'e2', time: 0.25, gain: 0.7 },
@@ -105,6 +116,7 @@ snare.play()
   * [.play](#SamplePlayer..player.play)
   * [.start(name, when, options)](#SamplePlayer..player.start) ⇒ <code>AudioNode</code>
   * [.stop(when, nodes)](#SamplePlayer..player.stop) ⇒ <code>Array</code>
+  * [.on(event, callback)](#SamplePlayer..player.on) ⇒ <code>AudioPlayer</code>
   * [.connect(destination)](#SamplePlayer..player.connect) ⇒ <code>AudioPlayer</code>
   * [.schedule(source, map, when)](#SamplePlayer..player.schedule) ⇒ <code>Array</code>
 

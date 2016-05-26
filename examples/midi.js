@@ -1,7 +1,6 @@
 /* global AudioContext */
 var load = require('audio-loader')
 var player = require('..')
-var midi = require('../ext/midi')
 var ac = new AudioContext()
 
 document.body.innerHTML = '<h1>Midi (sample-player example)</h1>(open the dev console)'
@@ -14,7 +13,7 @@ load(ac, 'examples/audio/piano.js').then(function (buffers) {
     console.log('Midi Access!', midiAccess)
     midiAccess.inputs.forEach(function (midiInput, channelKey) {
       console.log('Connecting to: ', midiInput)
-      midi.connect(midiInput, piano)
+      piano.listenToMidi(midiInput)
     }, function (msg) {
       console.log("Can't access midi: " + msg)
     })

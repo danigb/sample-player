@@ -8,8 +8,10 @@ document.body.innerHTML = '<h1>Events (sample-player)</h1>(open the dev console)
 console.log('Loading sample...')
 load(ac, 'examples/audio/piano.js').then(function (buffers) {
   console.log('loaded')
-  var piano = player(ac, buffers, { map: 'midi' }).connect(ac.destination)
-  piano.onstart = function (a, b, c) { console.log(a, b, c) }
+  var piano = player(ac, buffers).connect(ac.destination)
+  piano.on('start', function (a, b, c) {
+    console.log(a, b, c)
+  })
   var notes = NOTES.concat(NOTES.slice(0, -1).reverse())
   console.log('schedule', notes)
   piano.schedule(notes, function (note, i) {
