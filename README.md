@@ -19,9 +19,9 @@ sample.stop() // stop all playing sounds
 #### Create multi-sample player
 
 ```js
-var audioBank = require('sample-player')
+var player = require('sample-player')
 var ac = new AudioContext()
-var drums = audioBank(ac, {
+var drums = player(ac, {
   kick: <AudioBuffer>,
   snare: <AudioBuffer>,
   hihat: <AudioBuffer>
@@ -88,6 +88,14 @@ marimba.schedule([
 ## Install
 
 Via npm: `npm i --save sample-player` or grab the [browser ready file](https://raw.githubusercontent.com/danigb/sample-player/master/dist/sample-player.min.js) which exports `SamplePlayer` as window global.
+
+## Options
+
+The options can be passed to the `SamplePlayer` function to apply to all buffers, or to `start` function to apply to one shot.
+
+- `gain`: float between 0 to 1
+- `duration`: set the playing duration in seconds of the buffer(s)
+- `loop`: set to true to loop the audio buffer
 
 ## API
 

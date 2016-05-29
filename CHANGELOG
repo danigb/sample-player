@@ -1,5 +1,6 @@
 CHANGELOG
 
+[0.4.1] start options accepts duration as parameter (and stops the buffer)
 [0.4.0] Split code in modules. Add midi support by default.
 [0.3.3] Add ext/midi
 [0.3.2] Fix a typo in schedule event
