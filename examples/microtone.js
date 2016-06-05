@@ -10,24 +10,27 @@ function h (tag, text) {
 }
 
 var log = h(document.body, [
-  h('h1', 'Map note names example'),
-  h('h4', 'You can pass note names as strings or midi numbers')
+  h('h1', 'Microtone example'),
+  h('h4', 'You can pass midi numbers with decimal points'),
+  h('h4', 'You will hear an octave divided by 48 parts')
 ])
 
-var NOTES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-var DETUNED = NOTES.reduce(function (d, note) {
-  d.push(note)
-  d.push(note + 0.5)
-  return d
-}, [])
+var steps = 48
+var step = 12 / steps
+var notes = []
+for (var i = 0; i <= steps; i++) {
+  notes.push(i * step + 48)
+}
+log('Midi notes: ' + notes.join(','))
 log('Loading samples...')
 load(ac, 'examples/audio/piano.js').then(function (buffers) {
   log('Samples loaded.')
   var piano = player(ac, buffers).connect(ac.destination)
+  piano.on('event', function (a, b, c, d) { console.log(a, b, c, d) })
   piano.on('start', function (time, note) {
     log('note ' + note + ' started at ' + time)
   })
-  piano.schedule(0, DETUNED.map(function (note, i) {
-    return { name: note + 48, time: 0.2 * i }
+  piano.schedule(0, notes.map(function (note, i) {
+    return [ i * 0.2, note ]
   }))
 })

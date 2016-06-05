@@ -9,14 +9,16 @@ var player = require('sample-player')
 var ac = new AudioContext()
 
 var sample = player(ac, <AudioBuffer>)
-sample.play()
-sample.play() // can call play several times
+sample.start()
+sample.start() // can start several samples at the same time
 sample.stop() // stop all playing sounds
 ```
 
 ## Features
 
 #### Create multi-sample player
+
+Pass a map of names to audio buffers to create a multi-sample player:
 
 ```js
 var player = require('sample-player')
@@ -26,20 +28,30 @@ var drums = player(ac, {
   snare: <AudioBuffer>,
   hihat: <AudioBuffer>
 })
-drums.play('kick')
-drums.play('snare', { gain: 0.5 })
+drums.start('kick')
+drums.start('snare', ac.currentTime, { gain: 0.5 })
 ```
 
 #### Map note names to midi (and oposite)
 
+If the buffers are mapped to note names, you can pass note names (including enharmonics) or midi numbers:
+
 ```js
 var samples = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
 var piano = player(ac, samples)
-piano.play(69) // => Plays 'A4'
-piano.play('C#2') // => Plays 'Db2'
+piano.start(69) // => Plays 'A4'
+piano.start('C#2') // => Plays 'Db2'
+```
+
+Decimal midi note numbers can be used to detune the notes:
+
+```js
+piano.start(69.5) // => Plays a note in the middle of 'A4' and 'Bb4'
 ```
 
 #### Events
+
+You can register event handlers with the `on` function:
 
 ```js
 var drums = player(ac, { kick: ..., snare: ..., hihat ... })
@@ -56,12 +68,17 @@ drums.start('kick')
 
 #### Amplitude envelope control
 
+You can apply an amplitude envelope control player-wide or shot-wide:
+
 ```js
 var longSound = player(ac, <AudioBuffer>, { adsr: [1.2, 0.5, 0.8, 1.3] })
-longSound.play()
+longSound.start()
+longSound.start(ac.currentTime + 10, { adsr: [3, 0.5, 0.5, 1.3] })
 ```
 
 #### Listen to midi inputs
+
+Easily attach the player to a Web MIDI API `MidiInput`:
 
 ```js
 var piano = player(...)
@@ -77,7 +94,7 @@ window.navigator.requestMIDIAccess().then(function (midiAccess) {
 ```js
 var buffers = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
 var marimba = player(ac, buffers)
-marimba.schedule([
+marimba.schedule(ac.currentTime, [
   { note: 'c2', time: 0, gain: 0.9 },
   { note: 'e2', time: 0.25, gain: 0.7 },
   { note: 'g2', time: 0.5, gain: 0.5 },
@@ -117,7 +134,7 @@ Create a sample player.
 var SamplePlayer = require('sample-player')
 var ac = new AudioContext()
 var snare = SamplePlayer(ac, <AudioBuffer>)
-snare.play()
+snare.start()
 ```
 
 * [SamplePlayer(ac, source, options)](#SamplePlayer) ⇒ <code>player</code>
@@ -220,21 +237,34 @@ player.on('start', function(time, note) {
 ```
 
 <a name="player.schedule"></a>
-### player.schedule(source, map, when) ⇒ <code>Array</code>
-Schedule events to be played
+### player.schedule(when, events) ⇒ <code>Array</code>
+
+Schedule a list of events to be played at specific time.
+
+It supports two formats of events:
+
+- An array with `[time, note]`
+- An array with objects `{ time: ?, [name|note|midi|key]: ? }`
 
 **Returns**: <code>Array</code> - an array of ids  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| source | <code>Object</code> | the events source |
-| map | <code>function</code> | (Optional) a function to map the events source into events object. |
-| when | <code>Float</code> | (Optional) an absolute time to start (or currentTime if not present) |
+| when | <code>Float</code> | an absolute time to start (or AudioContext's currentTime if it's less than currentTime) |
+| source | <code>Array</code> | the events array |
 
 **Example**  
 ```js
+// Event format: [time, note]
+var piano = player(ac, ...).connect(ac.destination)
+piano.schedule(0, [ [0, 'C2'], [0.5, 'C3'], [1, 'C4'] ])
+```
+
+**Example**  
+```js
+// Event format: object { time: , name: }
 var drums = player(ac, ...).connect(ac.destination)
-drums.schedule([
+drums.schedule(ac.currentTime, [
   { name: 'kick', time: 0 },
   { name: 'snare', time: 0.5 },
   { name: 'kick', time: 1 },

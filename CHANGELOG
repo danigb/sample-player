@@ -1,5 +1,6 @@
 CHANGELOG
 
+[0.5.1] microtones: midi numbers can have decimals (and cents are added to options)
 [0.5.0]
 - schedule function simplified and order of parameter changed
 - player.on(function) is equivalent to player.on('event', function)

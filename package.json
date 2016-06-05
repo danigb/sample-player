@@ -1,6 +1,6 @@
 {
   "name": "sample-player",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A flexible web audio buffer player",
   "main": "lib/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "dist": "mkdir -p dist && browserify lib/index.js | uglifyjs > dist/sample-player.min.js && ls -hall dist/",
     "coverage": "istanbul cover _mocha",
     "cover": "npm run coverage && open coverage/lcov-report/index.html",
+    "discify": "browserify --full-paths lib/index.js | uglifyjs | discify > tmp/disc.html && open tmp/disc.html",
     "prepublish": "npm test && npm run dist"
   },
   "repository": "https://github.com/danigb/smplr/tree/master/packages/sample-player",
