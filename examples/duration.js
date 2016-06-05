@@ -14,7 +14,7 @@ load(ac, 'examples/audio/piano.js').then(function (buffers) {
   })
   var notes = NOTES.concat(NOTES.slice(0, -1).reverse())
   console.log('schedule', notes)
-  piano.schedule(notes, function (note, i) {
+  piano.schedule(0, notes.map(function (note, i) {
     return { name: note, time: 0.2 * i, duration: 0.05 }
-  })
+  }))
 })

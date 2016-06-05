@@ -1,6 +1,6 @@
 {
   "name": "sample-player",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A flexible web audio buffer player",
   "main": "lib/index.js",
   "scripts": {

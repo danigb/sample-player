@@ -14,6 +14,12 @@ var log = h(document.body, [
   h('h4', 'You can pass note names as strings or midi numbers')
 ])
 
+var NOTES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+var DETUNED = NOTES.reduce(function (d, note) {
+  d.push(note)
+  d.push(note + 0.5)
+  return d
+}, [])
 log('Loading samples...')
 load(ac, 'examples/audio/piano.js').then(function (buffers) {
   log('Samples loaded.')
@@ -21,7 +27,7 @@ load(ac, 'examples/audio/piano.js').then(function (buffers) {
   piano.on('start', function (time, note) {
     log('note ' + note + ' started at ' + time)
   })
-  piano.schedule(24, function (note, i) {
+  piano.schedule(0, DETUNED.map(function (note, i) {
     return { name: note + 48, time: 0.2 * i }
-  })
+  }))
 })

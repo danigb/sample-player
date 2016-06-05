@@ -44,6 +44,13 @@ describe('events', function () {
     assert.deepEqual(one.last, { event: 'ready', time: 0, object: 'obj' })
     assert.deepEqual(two.last, { event: 'ready', time: 0, object: 'obj' })
   })
+  it('uses "event" as default', function () {
+    var player = Player(new Audio().ac)
+    var handler = eventHandler()
+    player.on(handler)
+    player.emit('blah', 0, 'obj')
+    assert.deepEqual(handler.last, { event: 'blah', time: 0, object: 'obj' })
+  })
   it('on returns the player', function () {
     var player = Player(new Audio().ac)
     assert(player === player.on('event', eventHandler()))

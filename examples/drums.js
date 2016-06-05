@@ -20,10 +20,13 @@ load(ac, 'examples/audio/mrk2.json').then(function (buffers) {
   html.log('loaded')
   var drums = player(ac, buffers).connect(ac.destination)
   drums.on('event', function (a, b, c) { html.log(a, b, c) })
-  drums.schedule('x...x...x...x...'.split(''), function (e, i) {
-    if (e === 'x') return { name: 'kick', time: i * 1 / 8 }
+
+  var kicks = 'x...x...x...x...'.split('').map(function (e, i) {
+    if (e === 'x') return { name: 'kick', time: i * 1 / 8, gain: 1 }
   })
-  drums.schedule('..x...x...x...x.'.split(''), function (e, i) {
+  var snares = '..x...x...x...x.'.split('').map(function (e, i) {
     if (e === 'x') return { name: 'snare', gain: 0.2, time: i * 1 / 8 }
   })
+
+  drums.schedule(0, kicks.concat(snares))
 })

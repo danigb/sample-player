@@ -1,5 +1,9 @@
 CHANGELOG
 
+[0.5.0]
+- schedule function simplified and order of parameter changed
+- player.on(function) is equivalent to player.on('event', function)
+
 [0.4.1] start options accepts duration as parameter (and stops the buffer)
 [0.4.0] Split code in modules. Add midi support by default.
 [0.3.3] Add ext/midi
