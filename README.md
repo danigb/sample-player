@@ -1,6 +1,7 @@
-# sample-player [![npm](https://img.shields.io/npm/v/sample-player.svg)](https://www.npmjs.com/package/sample-player)
+# sample-player [![npm](https://img.shields.io/npm/v/sample-player.svg?style=flat-square)](https://www.npmjs.com/package/sample-player)
 
-[![Build Status](https://travis-ci.org/danigb/sample-player.svg?branch=master)](https://travis-ci.org/danigb/sample-player) [![Code Climate](https://codeclimate.com/github/danigb/sample-player/badges/gpa.svg)](https://codeclimate.com/github/danigb/sample-player) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard) [![license](https://img.shields.io/npm/l/sample-player.svg)](https://www.npmjs.com/package/sample-player)
+[![Build Status](https://img.shields.io/travis/danigb/sample-player/master.svg?style=flat-square)](https://travis-ci.org/danigb/sample-player)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard) [![license](https://img.shields.io/npm/l/sample-player.svg?style=flat-square)](https://www.npmjs.com/package/sample-player)
 
 Flexible audio sample player for browser:
 
@@ -66,14 +67,20 @@ drums.start('kick')
 // console.logs 'ended kick' when sound ends
 ```
 
+To add a listener to all events use: `player.on(function (eventName, when, obj, opts))`.
+
+Currently it fires: `start`,  `started`, `stop`, `ended`, `scheduled`
+
 #### Amplitude envelope control
 
-You can apply an amplitude envelope control player-wide or shot-wide:
+You can apply an amplitude envelope control player-wide or shot-wide. You can pass a signle `adsr` option with an array of `[attack, decay, sustain, release]` or add each parameter to the options object:
 
 ```js
+// using a single option to set all envelop
 var longSound = player(ac, <AudioBuffer>, { adsr: [1.2, 0.5, 0.8, 1.3] })
 longSound.start()
-longSound.start(ac.currentTime + 10, { adsr: [3, 0.5, 0.5, 1.3] })
+// override only the attack
+longSound.start(ac.currentTime + 10, { attack: 3 })
 ```
 
 #### Listen to midi inputs
@@ -89,7 +96,7 @@ window.navigator.requestMIDIAccess().then(function (midiAccess) {
 })
 ```
 
-#### Play events
+#### Schedule to play buffers at given times
 
 ```js
 var buffers = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
@@ -111,6 +118,11 @@ Via npm: `npm i --save sample-player` or grab the [browser ready file](https://r
 The options can be passed to the `SamplePlayer` function to apply to all buffers, or to `start` function to apply to one shot.
 
 - `gain`: float between 0 to 1
+- `attack`: the attack time of the amplitude envelope
+- `decay`: the decay time of the amplitude envelope
+- `sustain`: the sustain gain value of the amplitude envelope
+- `release`: the release time of the amplitude envelope
+- `adsr`: an array of `[attack, decay, sustain, release]`. Overrides other parameters.
 - `duration`: set the playing duration in seconds of the buffer(s)
 - `loop`: set to true to loop the audio buffer
 
@@ -146,19 +158,14 @@ snare.start()
   * [.schedule(source, map, when)](#player.schedule) ⇒ <code>Array</code>
   * [.listenToMidi(input, options)](#player.listenToMidi) ⇒ <code>[SamplePlayer](#SamplePlayer)</code>
 
-<a name="SamplePlayer..player.play"></a>
-
+<a name="player.play"></a>
 ### player.play
 An alias for `player.start`
-
 **See**: player.start  
-**Since**: 0.3.0  
-<a name="SamplePlayer..player.start"></a>
 
+<a name="player.start"></a>
 ### player.start(name, when, options) ⇒ <code>AudioNode</code>
-Start a sample buffer.
-
-The returned object has a function `stop(when)` to stop the sound.
+Start a sample buffer. The returned object has a function `stop(when)` to stop the sound.
 
 **Returns**: <code>AudioNode</code> - an audio node with a `stop` function  
 
@@ -170,18 +177,23 @@ The returned object has a function `stop(when)` to stop the sound.
 
 **Example**  
 ```js
+// A single sample player
 var sample = player(ac, <AudioBuffer>).connect(ac.destination)
-sample.start()
-sample.start(5, { gain: 0.7 }) // name not required since is only one AudioBuffer
+var first = sample.start(ac.currentTime, { loop: true })
+var second = sample.start(ac.currentTime + 0.5, { loop: true, gain: 0.7 }) // name not required since is only one AudioBuffer
+first.stop(ac.currentTime + 1) // only stops first sound
+sample.stop() // stop all sounds
 ```
+
 **Example**  
 ```js
+// A multi-sample player
 var drums = player(ac, { snare: <AudioBuffer>, kick: <AudioBuffer>, ... }).connect(ac.destination)
 drums.start('snare')
 drums.start('snare', 0, { gain: 0.3 })
 ```
-<a name="SamplePlayer..player.stop"></a>
 
+<a name="player.stop"></a>
 ### player.stop(when, nodes) ⇒ <code>Array</code>
 Stop some or all samples
 
@@ -200,8 +212,8 @@ longSound.start(ac.currentTime + 1)
 longSound.start(ac.currentTime + 2)
 longSound.stop(ac.currentTime + 3) // stop the three sounds
 ```
-<a name="SamplePlayer..player.connect"></a>
 
+<a name="player.connect"></a>
 ### player.connect(destination) ⇒ <code>AudioPlayer</code>
 Connect the player to a destination node
 

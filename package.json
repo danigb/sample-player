@@ -1,6 +1,6 @@
 {
   "name": "sample-player",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "description": "A flexible web audio buffer player",
   "main": "lib/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "discify": "browserify --full-paths lib/index.js | uglifyjs | discify > tmp/disc.html && open tmp/disc.html",
     "prepublish": "npm test && npm run dist"
   },
-  "repository": "https://github.com/danigb/smplr/tree/master/packages/sample-player",
+  "repository": "https://github.com/danigb/sample-player",
   "keywords": [
     "audio",
     "buffer",
@@ -24,7 +24,7 @@
   "author": "danigb <danigb@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/danigb/smplr/issues"
+    "url": "https://github.com/danigb/sample-player/issues"
   },
   "dependencies": {
     "adsr": "^1.0.0",
@@ -40,7 +40,6 @@
     "mocha": "^2",
     "uglifyjs": "^2.4.10",
     "audio-loader": "^0.4.0",
-    "sinon": "^1.17.2",
     "web-audio-test-api": "^0.5.2"
   }
 }
