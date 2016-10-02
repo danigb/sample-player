@@ -3,7 +3,7 @@ var assert = require('assert')
 var scheduler = require('../lib/scheduler')
 
 function StubPlayer (time) {
-  var player = { ac: { currentTime: time }, played: [] }
+  var player = { context: { currentTime: time }, played: [] }
   player.emit = function () {}
   player.start = function (note, time, options) {
     player.played.push({ time: time, note: note, opts: options })

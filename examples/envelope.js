@@ -10,9 +10,7 @@ function h (tag, text) {
 }
 
 var log = h(document.body, [
-  h('h1', 'Envelope example'),
-  h('h4', 'You can pass midi numbers with decimal points'),
-  h('h4', 'You will hear an octave divided by 48 parts')
+  h('h1', 'Envelope example')
 ])
 
 load(ac, 'examples/audio/440Hz.mp3').then(function (buffer) {

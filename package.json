@@ -1,10 +1,10 @@
 {
   "name": "sample-player",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A flexible web audio buffer player",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run coverage && npm run docs && npm run disc && npm run dist",
+    "build": "npm run coverage && npm run api && npm run discify && npm run dist",
     "test": "mocha",
     "api": "jsdoc2md --property-list-format none --member-index-format none lib/*.js > API.md",
     "dist": "mkdir -p dist && browserify lib/index.js | uglifyjs > dist/sample-player.min.js && ls -hall dist/",

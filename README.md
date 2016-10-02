@@ -318,12 +318,14 @@ npm install
 npm test
 ```
 
-To run the example:
+To run the examples:
 
 ```bash
-npm i -g beefy
-beefy example/midi.js
+npm i -g budo
+budo examples/microtone.js
 ```
+
+(Take a look into `examples` folder)
 
 ## License
 

@@ -1,5 +1,6 @@
 CHANGELOG
 
+[0.5.4] Fix an issue that ignores 'gain: 0' option. Fix an issue with the player.play function that doesnt return anything.
 [0.5.3] Add envelope options parameters. Add 'started' event.
 [0.5.1] microtones: midi numbers can have decimals (and cents are added to options)
 [0.5.0]
