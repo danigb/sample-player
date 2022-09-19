@@ -66,8 +66,8 @@ describe('scheduler', function () {
     })
     player.schedule(0, events)
     assert.deepEqual(player.played, [
-      { time: 1000, note: 'kick', opts: [] },
-      { time: 1001.5, note: 'kick', opts: [] }
+      { time: 1000, note: 'kick', opts: {} },
+      { time: 1001.5, note: 'kick', opts: {} }
     ])
   })
 })
