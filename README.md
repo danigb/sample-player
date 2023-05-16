@@ -3,6 +3,8 @@
 [![Build Status](https://img.shields.io/travis/danigb/sample-player/master.svg?style=flat-square)](https://travis-ci.org/danigb/sample-player)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard) [![license](https://img.shields.io/npm/l/sample-player.svg?style=flat-square)](https://www.npmjs.com/package/sample-player)
 
+⚠️ This is old codebase I don't want to maintain anymore. There are lot of alternatives out there, this is one: https://github.com/danigb/smplr Thanks! ⚠️
+
 Flexible audio sample player for browser:
 
 ```js
