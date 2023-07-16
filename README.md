@@ -35,9 +35,9 @@ drums.start('kick')
 drums.start('snare', ac.currentTime, { gain: 0.5 })
 ```
 
-#### Map note names to midi (and oposite)
+#### Map note names to midi (and opposite)
 
-If the buffers are mapped to note names, you can pass note names (including enharmonics) or midi numbers:
+If the buffers are mapped to note names, you can pass note names (including enharmonic) or midi numbers:
 
 ```js
 var samples = { 'C2': <AudioBuffer>, 'Db2': <AudioBuffer>, ... }
